@@ -101,12 +101,19 @@ function Report(props) {
     async function getArray() {
         const text = await getFilesAsText(files);
         const array = csvToArray(text);
-        console.log(array);
+        return array;
     }
 
     useEffect(() => {
-        getArray();
+        async function getResults() {
+            const csvArray = await getArray();
 
+            // Trading 212
+            Trading212.addActions(csvArray);
+            Trading212.getTotal();
+        }
+
+        getResults();
     }, []);
 
     return null;
