@@ -63,8 +63,19 @@ const Trading212 = (function () {
 
     function getTotalCurrencyKey(actions) {
         const keys = Object.keys(actions[0]);
+        const regex = /Total \([A-Z]{3}\)/;
         for (const key of keys) {
-            if (key.includes('Total')) {
+            if (regex.test(key)) {
+                return key;
+            }
+        }
+    }
+
+    function getConversionFeeKey(actions) {
+        const keys = Object.keys(actions[0]);
+        const regex = /Currency conversion fee \([A-Z]{3}\)/;
+        for (const key of keys) {
+            if (regex.test(key)) {
                 return key;
             }
         }
@@ -77,15 +88,17 @@ const Trading212 = (function () {
     // deducts fx fees (ID) from total eur price
     function removeCurrencyConversionFeesFromTotal(actions) {
         const currencyKey = getTotalCurrencyKey(actions);
+        const conversionKey = getConversionFeeKey(actions);
         const onlyBuyActions = getSpecificActions(actions, 'Market buy');
         const removedFees = onlyBuyActions.map(action => {
-            //TODO why are transactions fees under ID when buying (this id is randomly generated when selling), this def changes in the near future
-            const fee = parseFloat(action.ID);
-            const total = parseFloat(action[currencyKey]);
-            const totalWithoutFee = total - fee;
-
             const newObject = {...action};
-            newObject[currencyKey] = totalWithoutFee;
+            const fee = parseFloat(action[conversionKey]);
+            const total = parseFloat(action[currencyKey]);
+            if (!(isNaN(fee))) {
+                const totalWithoutFee = total - fee;
+                newObject[currencyKey] = toString(totalWithoutFee);
+                newObject['FeesDeductedFromTotal'] = true;
+            }
             return newObject;
         });
         return removedFees;

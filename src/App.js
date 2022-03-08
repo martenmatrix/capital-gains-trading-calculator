@@ -3,6 +3,28 @@ import { useDropzone } from 'react-dropzone'
 import { Trading212 } from './calculation';
 import './App.css';
 
+async function getFileAsText(file) {
+    const readUploadedFileAsText = (inputFile) => {
+        const temporaryFileReader = new FileReader();
+      
+        return new Promise((resolve, reject) => {
+          temporaryFileReader.onerror = () => {
+            temporaryFileReader.abort();
+            reject(new DOMException("Problem parsing input file."));
+          };
+      
+          temporaryFileReader.onload = () => {
+            resolve(temporaryFileReader.result);
+          };
+          temporaryFileReader.readAsText(inputFile);
+        });
+    };
+
+    const fileText = await readUploadedFileAsText(file);
+
+    return fileText;
+}
+
 function FileInput(props) {
     const [file, setFile] = props.fileState;
 
@@ -45,19 +67,10 @@ function Report(props) {
     const files = props.files;
 
     function csvToArray(str, delimiter = ",") {
-        // slice from start of text to the first \n index
-        // use split to create an array from string by delimiter
         const headers = str.slice(0, str.indexOf("\n")).split(delimiter);
 
-        // slice from \n index + 1 to the end of the text
-        // use split to create an array of each csv value row
         const rows = str.slice(str.indexOf("\n") + 1).split("\n");
 
-        // Map the rows
-        // split values from each row into an array
-        // use headers.reduce to create an object
-        // object properties derived from headers:values
-        // the object passed as an element of the array
         const arr = rows.map(function (row) {
           const values = row.split(delimiter);
           const newObject = headers.reduce(function (object, key, valueIndex) {
@@ -67,31 +80,8 @@ function Report(props) {
           }, {});
           return newObject;
         });
-      
-        // return the array
+
         return arr;
-    }
-      
-    async function getFileAsText(file) {
-        const readUploadedFileAsText = (inputFile) => {
-            const temporaryFileReader = new FileReader();
-          
-            return new Promise((resolve, reject) => {
-              temporaryFileReader.onerror = () => {
-                temporaryFileReader.abort();
-                reject(new DOMException("Problem parsing input file."));
-              };
-          
-              temporaryFileReader.onload = () => {
-                resolve(temporaryFileReader.result);
-              };
-              temporaryFileReader.readAsText(inputFile);
-            });
-        };
-
-        const fileText = await readUploadedFileAsText(file);
-
-        return fileText;
     }
 
     function mergeCSV(csvs) {
@@ -163,7 +153,11 @@ function Report(props) {
         getResults();
     }, []);
 
-    return null;
+    return (
+        <div className="results">
+
+        </div>
+    );
 }
 
 function App() {
