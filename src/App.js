@@ -48,11 +48,11 @@ function Report(props) {
         // slice from start of text to the first \n index
         // use split to create an array from string by delimiter
         const headers = str.slice(0, str.indexOf("\n")).split(delimiter);
-      
+
         // slice from \n index + 1 to the end of the text
         // use split to create an array of each csv value row
         const rows = str.slice(str.indexOf("\n") + 1).split("\n");
-      
+
         // Map the rows
         // split values from each row into an array
         // use headers.reduce to create an object
@@ -60,20 +60,19 @@ function Report(props) {
         // the object passed as an element of the array
         const arr = rows.map(function (row) {
           const values = row.split(delimiter);
-          const el = headers.reduce(function (object, header, index) {
-            object[header] = values[index];
+          const newObject = headers.reduce(function (object, key, valueIndex) {
+            const value = values[valueIndex];
+            object[key] = value;
             return object;
           }, {});
-          return el;
+          return newObject;
         });
       
         // return the array
         return arr;
     }
       
-    async function getFilesAsText(files) {
-        let filesText = '';
-
+    async function getFileAsText(file) {
         const readUploadedFileAsText = (inputFile) => {
             const temporaryFileReader = new FileReader();
           
@@ -90,18 +89,66 @@ function Report(props) {
             });
         };
 
-        await Promise.all(files.map(async (file) => {
-            const text = await readUploadedFileAsText(file);
-            filesText += text;
-        }));
+        const fileText = await readUploadedFileAsText(file);
 
-        return filesText;
+        return fileText;
+    }
+
+    function mergeCSV(csvs) {
+        const keysToAdd = [];
+
+        // every first element of the csv are compared if the keys are the same
+        csvs.forEach((csv1) => {
+            const firstElementKeysOfCSV1 = Object.keys(csv1[0]);
+
+            csvs.forEach((csv2) => {
+                const firstElementKeysOfCSV2 = Object.keys(csv2[0]);
+
+                const difference = firstElementKeysOfCSV1
+                    .filter(x => !firstElementKeysOfCSV2.includes(x))
+                    .concat(firstElementKeysOfCSV2.filter(x => !firstElementKeysOfCSV1.includes(x)));
+                
+                if (difference.length > 0) {
+                    difference.forEach((key) => {
+                        keysToAdd.push(key);
+                    });
+                }
+            });
+        });
+
+        const keysToAddWithoutDuplicates = [...new Set(keysToAdd)];
+
+        // iterate over all csv entry and add key if missing
+        const mergedCSV = [];
+
+        csvs.forEach((csv) => {
+            csv.forEach((csvEntry) => {
+                const newObject = {...csvEntry};
+                keysToAddWithoutDuplicates.forEach((key) => {
+                    if (!Object.keys(newObject).includes(key)) {
+                        newObject[key] = "";
+                    }
+                });
+                mergedCSV.push(newObject);
+            });
+        });
+
+        return mergedCSV;
     }
 
     async function getArray() {
-        const text = await getFilesAsText(files);
-        const array = csvToArray(text);
-        return array;
+        const csvs = [];
+
+        await Promise.all(files.map(async (file) => {
+            const text = await getFileAsText(file);
+            const csvArray = csvToArray(text);
+            csvs.push(csvArray);
+
+            Promise.resolve() //TODO do i need to do this?
+        }));
+
+        const csvArray = mergeCSV(csvs);
+        return csvArray;
     }
 
     useEffect(() => {

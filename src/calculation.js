@@ -70,10 +70,16 @@ const Trading212 = (function () {
         }
     }
 
+    function getSpecificActions(actions, onlyAction) {
+        return actions.filter(action => action.Action === onlyAction);
+    }
+
     // deducts fx fees (ID) from total eur price
     function removeCurrencyConversionFeesFromTotal(actions) {
         const currencyKey = getTotalCurrencyKey(actions);
-        const removedFees = actions.map(action => {
+        const onlyBuyActions = getSpecificActions(actions, 'Market buy');
+        const removedFees = onlyBuyActions.map(action => {
+            //TODO why are transactions fees under ID when buying (this id is randomly generated when selling), this def changes in the near future
             const fee = parseFloat(action.ID);
             const total = parseFloat(action[currencyKey]);
             const totalWithoutFee = total - fee;
@@ -83,10 +89,6 @@ const Trading212 = (function () {
             return newObject;
         });
         return removedFees;
-    }
-
-    function getSpecificActions(action) {
-
     }
 
     function getRealizedGains(actions, method, years) {
