@@ -1,18 +1,6 @@
 // Converts a complete ISO date string in UTC time, the typical format for transmitting a date in JSON, to a JavaScript Date instance.
 import { format, parseJSON, isDate } from 'date-fns';
-
-function convertDateStringsToDateObjects(actions, key) {
-    const actionsWithDateObjects = actions.map(action => {
-        const stringDate = action[key];
-        const dateObject = parseJSON(stringDate);
-        
-        const convertedAction = {...action};
-        convertedAction[key] = dateObject;
-        return convertedAction;
-    });
-
-    return actionsWithDateObjects;
-}
+import { convertDateStringsToDateObjects } from './misc';
 
 const Trading212 = (function () {
     const actionsDone = [];

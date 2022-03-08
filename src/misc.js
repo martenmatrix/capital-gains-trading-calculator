@@ -80,4 +80,17 @@ function csvTextToArray(str, delimiter = ",") {
     return arr;
 }
 
-export { getFileAsText, mergeCSV, csvTextToArray};
+function convertDateStringsToDateObjects(actions, key) {
+    const actionsWithDateObjects = actions.map(action => {
+        const stringDate = action[key];
+        const dateObject = parseJSON(stringDate);
+        
+        const convertedAction = {...action};
+        convertedAction[key] = dateObject;
+        return convertedAction;
+    });
+
+    return actionsWithDateObjects;
+}
+
+export { getFileAsText, mergeCSV, csvTextToArray, convertDateStringsToDateObjects};
