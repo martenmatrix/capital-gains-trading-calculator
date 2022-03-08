@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { Trading212 } from './calculation';
+import { Trading212 } from './trading212';
 import { getFileAsText, mergeCSV, csvTextToArray } from './misc';
 import './App.css';
 import './loadingAnimation.css';
