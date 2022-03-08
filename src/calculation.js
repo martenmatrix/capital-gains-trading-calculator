@@ -1,5 +1,5 @@
 // Converts a complete ISO date string in UTC time, the typical format for transmitting a date in JSON, to a JavaScript Date instance.
-import { parseJSON, isDate } from 'date-fns';
+import { format, parseJSON, isDate } from 'date-fns';
 
 function convertDateStringsToDateObjects(actions, key) {
     const actionsWithDateObjects = actions.map(action => {
@@ -46,7 +46,7 @@ const Trading212 = (function () {
 
             return copyOfActions;
         } catch (e) {
-            alert('Some of the dates did not get converted correctly. This could be a problem because you inputted invalid data or because the application did something wrong. Check your data and if that does not solve anything create an issue.')
+            alert('Some of the dates did not get converted correctly. This could be a problem because you inputted invalid data or because the application did something wrong. Check your data and if that does not solve anything create an issue.');
         }
     }
 
@@ -103,6 +103,22 @@ const Trading212 = (function () {
         if (method === 'fifo') {
         }
     }
+    
+    function getPossibleYears() {
+        const actions = getConvertedActions();
+    
+        const possibleYears = [];
+        actions.forEach(action => {
+            const date = action.Time;
+            const year = format(date, 'yyyy');
+        
+            if (!possibleYears.includes(year)) {
+                possibleYears.push(year);
+            }
+        });
+        
+        return possibleYears;
+    }
 
     function getTotal(method) {
         const actions = getConvertedActions();
@@ -111,7 +127,7 @@ const Trading212 = (function () {
         console.log({actions, actionsWithoutFees});
     }
 
-    return { addActions, getTotal };
+    return { addActions, getTotal, getPossibleYears };
 })()
 
 export { Trading212 };

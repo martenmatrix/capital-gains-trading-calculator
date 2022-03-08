@@ -48,3 +48,14 @@
 .App .information-banner .text {
     overflow-wrap: break-word;
 }
+
+.App .results {
+    height: 70%;
+    width: 100%;
+    line-height: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
