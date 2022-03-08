@@ -31,10 +31,6 @@ const Trading212 = (function () {
         return actionsWithoutDuplicates;
     }
 
-    function removeDeposits(actions) {
-        return actions.filter(action => action.Action !== "Deposit");
-    }
-
     function getActionsSortedByDate(actions) {
         const withDateObjects = convertDateStringsToDateObjects(actions, 'Time');
 
@@ -56,8 +52,7 @@ const Trading212 = (function () {
 
     function getConvertedActions() {
         const withoutDuplicates = getActionsWithoutDuplicates(actionsDone);
-        const withoutDeposits = removeDeposits(withoutDuplicates);
-        const sortedByDate = getActionsSortedByDate(withoutDeposits);
+        const sortedByDate = getActionsSortedByDate(withoutDuplicates);
         return sortedByDate;
     }
 
@@ -85,12 +80,12 @@ const Trading212 = (function () {
         return actions.filter(action => action.Action === onlyAction);
     }
 
-    // deducts fx fees (ID) from total eur price
+    // deducts fx fees from total price
     function removeCurrencyConversionFeesFromTotal(actions) {
         const currencyKey = getTotalCurrencyKey(actions);
         const conversionKey = getConversionFeeKey(actions);
-        const onlyBuyActions = getSpecificActions(actions, 'Market buy');
-        const removedFees = onlyBuyActions.map(action => {
+
+        const removedFees = actions.map(action => {
             const newObject = {...action};
             const fee = parseFloat(action[conversionKey]);
             const total = parseFloat(action[currencyKey]);
