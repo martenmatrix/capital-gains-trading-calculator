@@ -1,3 +1,5 @@
+import { isDate, parseJSON } from 'date-fns';
+
 async function getFileAsText(file) {
     const readUploadedFileAsText = (inputFile) => {
         const temporaryFileReader = new FileReader();
@@ -82,15 +84,37 @@ function csvTextToArray(str, delimiter = ",") {
 
 function convertDateStringsToDateObjects(actions, key) {
     const actionsWithDateObjects = actions.map(action => {
-        const stringDate = action[key];
-        const dateObject = parseJSON(stringDate);
-        
         const convertedAction = {...action};
-        convertedAction[key] = dateObject;
+        const stringDate = action[key];
+
+        if (!isDate(stringDate)) {
+            const dateObject = parseJSON(stringDate);
+            convertedAction[key] = dateObject;
+        }
+        
         return convertedAction;
     });
 
     return actionsWithDateObjects;
 }
 
-export { getFileAsText, mergeCSV, csvTextToArray, convertDateStringsToDateObjects};
+function getObjectsSortedByDate(arrayOfObjects, dateKey) {
+    const withDateObjects = convertDateStringsToDateObjects(arrayOfObjects, dateKey);
+
+    const copyOfActions = withDateObjects.map(object => ({ ...object }))
+    try {
+        copyOfActions.sort((firstElement, secondElement) => {
+            if (!(isDate(firstElement[dateKey]) && isDate(secondElement[dateKey]))) {
+                throw new Error('Trying to sort with invalid dates.')
+            }
+
+            return secondElement - firstElement;
+        });
+
+        return copyOfActions;
+    } catch (e) {
+        alert('Some of the dates did not get converted correctly. This could be a problem because you inputted invalid data or because the application did something wrong. Check your data and if that does not solve anything create an issue.');
+    }
+}
+
+export { getFileAsText, mergeCSV, csvTextToArray, convertDateStringsToDateObjects, getObjectsSortedByDate };

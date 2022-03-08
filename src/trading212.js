@@ -1,6 +1,6 @@
 // Converts a complete ISO date string in UTC time, the typical format for transmitting a date in JSON, to a JavaScript Date instance.
-import { format, parseJSON, isDate } from 'date-fns';
-import { convertDateStringsToDateObjects } from './misc';
+import { format } from 'date-fns';
+import { getObjectsSortedByDate } from './misc';
 
 const Trading212 = (function () {
     const actionsDone = [];
@@ -19,28 +19,9 @@ const Trading212 = (function () {
         return actionsWithoutDuplicates;
     }
 
-    function getActionsSortedByDate(actions) {
-        const withDateObjects = convertDateStringsToDateObjects(actions, 'Time');
-
-        const copyOfActions = withDateObjects.map(object => ({ ...object }))
-        try {
-            copyOfActions.sort((firstElement, secondElement) => {
-                if (!(isDate(firstElement.Time) && isDate(secondElement.Time))) {
-                    throw new Error('Trying to sort with invalid dates.')
-                }
-
-                return secondElement - firstElement;
-            });
-
-            return copyOfActions;
-        } catch (e) {
-            alert('Some of the dates did not get converted correctly. This could be a problem because you inputted invalid data or because the application did something wrong. Check your data and if that does not solve anything create an issue.');
-        }
-    }
-
     function getConvertedActions() {
         const withoutDuplicates = getActionsWithoutDuplicates(actionsDone);
-        const sortedByDate = getActionsSortedByDate(withoutDuplicates);
+        const sortedByDate = getObjectsSortedByDate(withoutDuplicates, 'Time');
         return sortedByDate;
     }
 
@@ -108,14 +89,18 @@ const Trading212 = (function () {
         return possibleYears;
     }
 
-    function getTotal(method) {
+    function getRealizedProfits(method) {
         const actions = getConvertedActions();
         const actionsWithoutFees = removeCurrencyConversionFeesFromTotal(actions);
         const realizedGains = getRealizedGains(actions, 'fifo', [2021]);
         console.log({actions, actionsWithoutFees});
     }
 
-    return { addActions, getTotal, getPossibleYears };
+    function getCurrencyExchangeFees() {
+
+    }
+
+    return { addActions, getRealizedProfits, getCurrencyExchangeFees, getPossibleYears };
 })()
 
 export { Trading212 };
