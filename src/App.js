@@ -17,7 +17,7 @@ function FileInput(props) {
         {
           isDragActive ?
             <p>Drop the files here ...</p> :
-            <p>Read the text below (i beg you) and drop your CSV file here or <u>click here</u> to select it.</p>
+            <p>Read the text below (i beg you) and drop your CSV file here or <u>click here</u> to select them.</p>
         }
       </div>
     )
@@ -27,7 +27,7 @@ function InformationBanner() {
     return (
         <div className="information-banner">
             <div className="text">
-            Create a CSV file from Trading 212 like <a href="https://helpcentre.trading212.com/hc/en-us/articles/360016898917-Can-I-export-the-trading-data-from-my-account-" target="_blank" rel="noreferrer">this</a>. Export every possible year, you will get one CSV per year.
+            Create a CSV file from Trading 212 like <a href="https://helpcentre.trading212.com/hc/en-us/articles/360016898917-Can-I-export-the-trading-data-from-my-account-" target="_blank" rel="noreferrer">this</a>. Export your whole trading history in 12 months CSV's and drop/select them all at once.
                 All uploaded files stay on your PC. You can find the code of this application or report issues <a href="https://github.com/martenmatrix/trading212-tax-generator" target="_blank" rel="noreferrer">here</a>.
             </div>
         </div>
