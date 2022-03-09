@@ -1,12 +1,16 @@
-/* {
+/* 
+EXAMPLE INPUT OBJECT:
+    {
     amount: 10.00 FLOAT,
     date: new Date('2020-01-01') DATE,
     totalPrice: 100.00 FLOAT when buying spent / when selling gained,
     symbol: 'STK1' STRING,
     type: 'BUY' / 'SELL' STRING,
-  } */
+    } 
+*/
 
-// maybe switch to this library https://github.com/bernardobelchior/fifo-capital-gains-js
+// possible alternative is https://github.com/bernardobelchior/fifo-capital-gains-js
+
 import { getObjectsSortedByDate } from "../misc";
 import { format } from "date-fns";
 
