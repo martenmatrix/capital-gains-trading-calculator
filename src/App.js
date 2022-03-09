@@ -100,6 +100,7 @@ function Report(props) {
         }));
 
         const csvArray = mergeCSV(csvs);
+        console.table(csvArray);
         return csvArray;
     }
 
