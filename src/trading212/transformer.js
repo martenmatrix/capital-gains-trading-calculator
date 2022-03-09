@@ -60,7 +60,7 @@ const Trading212 = (function () {
             const total = parseFloat(action[currencyKey]);
             if (!(isNaN(fee))) {
                 const totalWithoutFee = total - fee;
-                newObject[currencyKey] = toString(totalWithoutFee);
+                newObject[currencyKey] = String(totalWithoutFee);
                 newObject['FeesDeductedFromTotal'] = true;
             }
             return newObject;
@@ -90,13 +90,12 @@ const Trading212 = (function () {
     }
 
     function convertForFIFOCalculation(actions) {
-        const convertedActions = [];
-        actions.map(action => {
+        const convertedActions = actions.map(action => {
             const convertedAction = {};
             convertedAction.amount = parseFloat(action['No. of shares']);
             convertedAction.date = action.Time;
             convertedAction.totalPrice = parseFloat(action[getTotalCurrencyKey(actions)]);
-            convertedAction.symbol = action['Currency (Price / share)'];
+            convertedAction.symbol = action.Ticker;
             const getAction = () => {
                 if (action.Action === 'Market buy') return 'BUY';
                 else if (action.Action === 'Market sell') return 'SELL';
@@ -106,16 +105,18 @@ const Trading212 = (function () {
 
             return convertedAction;
         });
+
+        return convertedActions;
     }
 
-    function getRealizedProfits(method) {
+    function getRealizedProfits(method = 'fifo') {
         const actions = getConvertedActions();
         const actionsWithoutFees = removeCurrencyConversionFeesFromTotal(actions);
         const onlyBuys = getSpecificActions(actionsWithoutFees, 'Market buy');
         const onlySells = getSpecificActions(actionsWithoutFees, 'Market sell');
         const onlySellsAndBuys = [...onlyBuys, ...onlySells];
         const FIFOFormat = convertForFIFOCalculation(onlySellsAndBuys);
-        console.log(FIFOFormat);
+        console.table(FIFOFormat);
     }
 
     function getCurrencyExchangeFees() {

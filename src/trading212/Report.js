@@ -16,6 +16,7 @@ function Trading212Report(props) {
         setCurrentTask('Adding actions');
         Trading212.addActions(csv);
         const possYears = Trading212.getPossibleYears();
+        console.log(Trading212.getRealizedProfits('fifo'));
 
         setCurrentTask('Getting possible years');
         setPossibleYears(possYears);
