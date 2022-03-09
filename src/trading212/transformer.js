@@ -19,12 +19,6 @@ const Trading212 = (function () {
         return actionsWithoutDuplicates;
     }
 
-    function getConvertedActions() {
-        const withoutDuplicates = getActionsWithoutDuplicates(actionsDone);
-        const sortedByDate = getObjectsSortedByDate(withoutDuplicates, 'Time');
-        return sortedByDate;
-    }
-
     function getTotalCurrencyKey(actions) {
         const keys = Object.keys(actions[0]);
         const regex = /Total \([A-Z]{3}\)/;
@@ -110,13 +104,14 @@ const Trading212 = (function () {
     }
 
     function getRealizedProfits(method = 'fifo') {
-        const actions = getConvertedActions();
-        const actionsWithoutFees = removeCurrencyConversionFeesFromTotal(actions);
+        const actionsWithoutFees = removeCurrencyConversionFeesFromTotal(actionsDone);
+
         const onlyBuys = getSpecificActions(actionsWithoutFees, 'Market buy');
         const onlySells = getSpecificActions(actionsWithoutFees, 'Market sell');
         const onlySellsAndBuys = [...onlyBuys, ...onlySells];
-        const FIFOFormat = convertForFIFOCalculation(onlySellsAndBuys);
-        console.table(FIFOFormat);
+
+        const withoutDuplicates = getActionsWithoutDuplicates(onlySellsAndBuys);
+        const FIFOFormat = convertForFIFOCalculation(withoutDuplicates);
     }
 
     function getCurrencyExchangeFees() {
