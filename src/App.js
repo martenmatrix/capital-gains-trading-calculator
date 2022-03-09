@@ -1,9 +1,11 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
-import Trading212 from './trading212/transformer';
 import { getFileAsText, mergeCSV, csvTextToArray } from './misc';
+import LoadingAnimation from './LoadingAnimation';
 import './styles/App.css';
-import './styles/loadingAnimation.css';
+
+// Reports
+import Trading212Report from './trading212/Report';
 
 function FileInput(props) {
     const [file, setFile] = props.fileState;
@@ -34,55 +36,6 @@ function InformationBanner() {
             </div>
         </div>
     )
-}
-
-function LoadingAnimation(props) {
-    const task = props.task;
-
-    return (
-        <>
-            <div className="lds-ripple"><div></div><div></div></div>
-            <p>This may take some time. <br/> Do not refresh the page. <br /> <br /> &#8987; {task}...</p>
-        </>
-    )
-}
-
-function Trading212Report(props) {
-    const csv = props.csv;
-    const [possibleYears, setPossibleYears] = useState([]);
-    const [currentTask, setCurrentTask] = useState(null);
-    const [reportData, setReportData] = useState({
-        realizedProfit: null,
-        currencyExchangeFees: null,
-    });
-    const [selectedYear, setSelectedYear] = useState([]);
-
-    useEffect(() => {
-        setCurrentTask('Adding actions');
-        Trading212.addActions(csv);
-        const possYears = Trading212.getPossibleYears();
-
-        setCurrentTask('Getting possible years');
-        setPossibleYears(possYears);
-
-        setCurrentTask(null);
-    }, [csv])
-
-    useEffect(() => {
-        
-    }, [selectedYear]);
-
-    if (currentTask === null) {
-        return (
-            <div className="report">
-                <select name="years">
-                    {possibleYears.map(year => <option value={year} key={year}>{year}</option>)}
-                </select>
-            </div>
-        )
-    } else {
-        return <LoadingAnimation task={currentTask}/>
-    }
 }
 
 function Report(props) {
