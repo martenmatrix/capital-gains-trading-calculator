@@ -66,22 +66,6 @@ const Trading212 = (function () {
         if (method === 'fifo') {
         }
     }
-    
-    function getPossibleYears() {
-        const actions = getConvertedActions();
-    
-        const possibleYears = [];
-        actions.forEach(action => {
-            const date = action.Time;
-            const year = format(date, 'yyyy');
-        
-            if (!possibleYears.includes(year)) {
-                possibleYears.push(year);
-            }
-        });
-        
-        return possibleYears;
-    }
 
     function convertForFIFOCalculation(actions) {
         const convertedActions = actions.map(action => {
@@ -118,7 +102,7 @@ const Trading212 = (function () {
 
     }
 
-    return { addActions, getRealizedProfits, getCurrencyExchangeFees, getPossibleYears };
+    return { addActions, getRealizedProfits, getCurrencyExchangeFees };
 })()
 
 export default Trading212;

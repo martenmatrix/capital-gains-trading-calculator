@@ -31,18 +31,6 @@ const FIFOCalculator = () => {
         });
     }
 
-    function getAllYears(history) {
-        //TODO i did write this already
-        const possibleYears = [];
-        history.forEach(object => {
-            const date = object.date;
-            const year = format(date, 'yyyy');
-            possibleYears.push(year);
-
-        });
-        return possibleYears;
-    }
-
     function getExpensesAndIncomes() {
         const expensesAndIncomes = [];
 

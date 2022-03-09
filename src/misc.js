@@ -1,4 +1,4 @@
-import { isDate, parseJSON } from 'date-fns';
+import { format, isDate, parseJSON } from 'date-fns';
 
 async function getFileAsText(file) {
     const readUploadedFileAsText = (inputFile) => {
@@ -117,4 +117,18 @@ function getObjectsSortedByDate(arrayOfObjects, dateKey) {
     }
 }
 
-export { getFileAsText, mergeCSV, csvTextToArray, convertDateStringsToDateObjects, getObjectsSortedByDate };
+function getAllYears(objects, yearKey) {
+    const possibleYears = [];
+    objects.forEach(object => {
+        let date = object[yearKey];
+        if (!isDate(date)) {
+            date = parseJSON(date);
+        }
+        const year = format(date, 'yyyy');
+        possibleYears.push(year);
+
+    });
+    return possibleYears;
+}
+
+export { getFileAsText, mergeCSV, csvTextToArray, convertDateStringsToDateObjects, getObjectsSortedByDate, getAllYears };
