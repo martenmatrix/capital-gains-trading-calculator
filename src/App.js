@@ -19,7 +19,7 @@ function FileInput(props) {
         {
           isDragActive ?
             <p>Drop the files here ...</p> :
-            <p>Read the text below (i beg you) and drop your CSV file here or <u>click here</u> to select them.</p>
+            <p>✨ Read the text below and drop your CSV file here or <u>click here</u> to select them.</p>
         }
       </div>
     )
