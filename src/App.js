@@ -1,9 +1,9 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { Trading212 } from './trading212';
+import Trading212 from './trading212/transformer';
 import { getFileAsText, mergeCSV, csvTextToArray } from './misc';
-import './App.css';
-import './loadingAnimation.css';
+import './styles/App.css';
+import './styles/loadingAnimation.css';
 
 function FileInput(props) {
     const [file, setFile] = props.fileState;
