@@ -1,41 +1,20 @@
-/* 
-EXAMPLE INPUT OBJECT:
-    {
-    amount: 10.00 FLOAT,
-    date: new Date('2020-01-01') DATE,
-    totalPrice: 100.00 FLOAT when buying spent / when selling gained,
-    symbol: 'STK1' STRING,
-    type: 'BUY' / 'SELL' STRING,
-    } 
-*/
-
 // possible alternative is https://github.com/bernardobelchior/fifo-capital-gains-js
 
-import { getObjectsSortedByDate } from "../misc";
+import { getObjectsSortedByDate, getAllYears } from "../misc";
 import { format } from "date-fns";
 
 const FIFOCalculator = () => {
-    const buyHistory = [];
-    const sellHistory = [];
-
-    function addHistory(objectArray) {
-        objectArray.forEach(object => {
-            const copyOfObject = {...object};
-            
-            if (copyOfObject.type === 'BUY') {
-                copyOfObject.amountUsed = 0;
-                buyHistory.push(copyOfObject);
-            } else if (copyOfObject.type === 'SELL') {
-                sellHistory.push(copyOfObject);
-            }
-        });
+    const data = {
+        buyHistory: null,
+        sellHistory: null,
+        expensesAndIncomes: null,
     }
 
-    function getExpensesAndIncomes() {
+    function getAndSetExpensesAndIncomes() {
         const expensesAndIncomes = [];
 
-        const buyHistorySorted = getObjectsSortedByDate(buyHistory, 'date');
-        const sellHistorySorted = getObjectsSortedByDate(sellHistory, 'date');
+        const buyHistorySorted = getObjectsSortedByDate(data.buyHistory, 'date');
+        const sellHistorySorted = getObjectsSortedByDate(data.sellHistory, 'date');
 
         for (const sellAction of sellHistorySorted) {
 
@@ -74,15 +53,37 @@ const FIFOCalculator = () => {
             console.table(expensesAndIncomes);
             throw new Error('The calculation performed by the application is invalid.');
         } else {
-            return expensesAndIncomes;
+            data.expensesAndIncomes = expensesAndIncomes;
         }
+        console.table(expensesAndIncomes);
+    }
+
+    function setHistory(objectArray) {
+        const buyHistory = [];
+        const sellHistory = [];
+
+        objectArray.forEach(object => {
+            const copyOfObject = {...object};
+            
+            if (copyOfObject.type === 'BUY') {
+                copyOfObject.amountUsed = 0;
+                buyHistory.push(copyOfObject);
+            } else if (copyOfObject.type === 'SELL') {
+                sellHistory.push(copyOfObject);
+            }
+        });
+
+        data.buyHistory = buyHistory;
+        data.sellHistory = sellHistory;
+
+        getAndSetExpensesAndIncomes();
     }
     
     function getPossibleYears() {
-        return null;
+        return getAllYears(data.expensesAndIncomes, 'year');
     }
 
-    return { addHistory, getPossibleYears };
+    return { setHistory, getPossibleYears };
 }
 
 export default FIFOCalculator;

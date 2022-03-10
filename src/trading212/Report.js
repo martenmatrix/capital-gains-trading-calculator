@@ -15,7 +15,7 @@ function Trading212Report(props) {
     useEffect(() => {
         setCurrentTask('Adding actions');
         Trading212.addActions(csv);
-        console.log(Trading212.getRealizedProfits('fifo'));
+        console.log(Trading212.getFiFo());
 
         setCurrentTask('Getting possible years');
 

@@ -38,6 +38,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-transform-modules-commonjs": "^7.16.8",
     "jest": "^27.5.1"
   }
 }

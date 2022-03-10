@@ -126,7 +126,6 @@ function getAllYears(objects, yearKey) {
         }
         const year = format(date, 'yyyy');
         possibleYears.push(year);
-
     });
     return possibleYears;
 }

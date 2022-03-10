@@ -81,7 +81,7 @@ const Trading212 = (function () {
         return convertedActions;
     }
 
-    function getRealizedProfits(method = 'fifo') {
+    function getFiFo() {
         const actionsWithoutFees = removeCurrencyConversionFeesFromTotal(actionsDone);
 
         const onlyBuys = getSpecificActions(actionsWithoutFees, 'Market buy');
@@ -91,15 +91,15 @@ const Trading212 = (function () {
         const withoutDuplicates = getActionsWithoutDuplicates(onlySellsAndBuys);
         const FIFOFormat = convertForFIFOCalculation(withoutDuplicates);
         const fifo = FiFo();
-        fifo.addHistory(FIFOFormat);
-        console.table(fifo.getExpensesAndIncomes());
+        fifo.setHistory(FIFOFormat);
+        console.table(fifo.getPossibleYears());
     }
 
     function getCurrencyExchangeFees() {
 
     }
 
-    return { addActions, getRealizedProfits, getCurrencyExchangeFees };
+    return { addActions, getFiFo, getCurrencyExchangeFees };
 })()
 
 export default Trading212;
