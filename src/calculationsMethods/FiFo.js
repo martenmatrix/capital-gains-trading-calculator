@@ -78,7 +78,11 @@ const FIFOCalculator = () => {
         }
     }
     
-    return { addHistory, getExpensesAndIncomes};
+    function getPossibleYears() {
+        return null;
+    }
+
+    return { addHistory, getPossibleYears };
 }
 
 export default FIFOCalculator;
