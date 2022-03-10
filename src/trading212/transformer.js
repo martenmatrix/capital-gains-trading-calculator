@@ -1,5 +1,7 @@
 // Converts a complete ISO date string in UTC time, the typical format for transmitting a date in JSON, to a JavaScript Date instance.
 import FiFo from '../calculationsMethods/FiFo';
+import { parseJSON, format } from 'date-fns';
+import { getAllYears } from '../misc';
 
 const Trading212 = (function () {
     const actionsDone = [];
@@ -81,7 +83,7 @@ const Trading212 = (function () {
         return convertedActions;
     }
 
-    function getFiFo() {
+    function calculateFiFo() {
         const actionsWithoutFees = removeCurrencyConversionFeesFromTotal(actionsDone);
 
         const onlyBuys = getSpecificActions(actionsWithoutFees, 'Market buy');
@@ -94,9 +96,19 @@ const Trading212 = (function () {
         fifo.setHistory(FIFOFormat);
     }
 
-    function getCurrencyConversionFees() {
+    function getCurrencyConversionFees(selectedYear) {
+        const getYear = (stringDate) => {
+            const date = parseJSON(stringDate);
+            const year = format(date, 'yyyy');
+            return year;
+        }
+
         const feeKey = getConversionFeeKey(actionsDone);
         const fees = actionsDone.reduce((currentFee, action) => {
+            if (getYear(action.Time) !== selectedYear) {
+                return currentFee;
+            }
+
             if (action[feeKey] !== "") {
                 const fee = parseFloat(action[feeKey]);
                 return currentFee + fee;    
@@ -106,8 +118,18 @@ const Trading212 = (function () {
 
         return fees;
     }
+ 
+    function getYears() {
+        return getAllYears(actionsDone, 'Time');
+    }
 
-    return { addActions, getFiFo, getCurrencyConversionFees };
+    function getCurrency() {
+        const totalString = getTotalCurrencyKey(actionsDone);
+        const currencySymbol = totalString.match(/Total \(([A-Z]{3})\)/)[1];
+        return currencySymbol;
+    }
+
+    return { addActions, calculateFiFo, getCurrencyConversionFees, getYears, getCurrency };
 })()
 
 export default Trading212;

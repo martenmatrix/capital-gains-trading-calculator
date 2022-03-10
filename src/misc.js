@@ -130,7 +130,10 @@ function getAllYears(objects, yearKey) {
             }
             year = format(date, 'yyyy');
         }
-        possibleYears.push(year);
+
+        if (!possibleYears.includes(year)) {
+            possibleYears.push(year);
+        }
     });
     return possibleYears;
 }
