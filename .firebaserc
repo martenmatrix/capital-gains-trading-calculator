@@ -1,0 +1,5 @@
+{
+  "projects": {
+    "default": "trading-csv-fifo-calculator"
+  }
+}
