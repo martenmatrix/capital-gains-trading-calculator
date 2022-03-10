@@ -8,11 +8,12 @@ import './styles/App.css';
 import Trading212Report from './trading212/Report';
 
 function FileInput(props) {
-    const [file, setFile] = props.fileState;
+    const [, setFile] = props.fileState;
 
     const onDrop = useCallback(acceptedFiles => {
       setFile(acceptedFiles);
-    });
+    }, [setFile]);
+
     const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop, accept: '.csv', multiple: true})
   
     return (
@@ -43,27 +44,23 @@ function Report(props) {
     const files = props.files;
     const reportStyle = 'trading212';
 
-    async function getArray() {
-        const csvs = [];
-
-        await Promise.all(files.map(async (file) => {
-            const text = await getFileAsText(file);
-            const csvArray = csvTextToArray(text);
-            csvs.push(csvArray);
-        }));
-
-        const csvArray = mergeCSV(csvs);
-        console.table(csvArray);
-        return csvArray;
-    }
-
     useEffect(() => {
-        async function getCSVArray() {
-            const csvArray = await getArray();
+        async function getAndSetCSVArray() {
+            const csvs = [];
+    
+            await Promise.all(files.map(async (file) => {
+                const text = await getFileAsText(file);
+                const csvArray = csvTextToArray(text);
+                csvs.push(csvArray);
+            }));
+    
+            const csvArray = mergeCSV(csvs);
+            console.table(csvArray);
             setCSVArray(csvArray);
         }
-        getCSVArray();
-    }, []);
+
+        getAndSetCSVArray();
+    }, [files]);
 
     const renderResults = () => {
         if (CSVArray) {
