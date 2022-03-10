@@ -1,4 +1,4 @@
-import { FiFoCalculator } from '../calculationsMethods/FiFo';
+import FiFoCalculator from '../calculationsMethods/FiFo';
 
 describe('FiFo Calculation', () => {
     const input = [
@@ -27,7 +27,15 @@ describe('FiFo Calculation', () => {
 
     const fifo = FiFoCalculator();
 
-    test('Able to add items', () => {
+    test('Set history', () => {
         fifo.setHistory(input);
+    });
+
+    test('Get possible years (only years with sell trades)', () => {
+        const possibleYears = ['2020'];
+        const possibleYearsResponse = fifo.getPossibleYears();
+        console.log(possibleYearsResponse);
+
+        expect(possibleYearsResponse).toEqual(possibleYears);
     });
 });
