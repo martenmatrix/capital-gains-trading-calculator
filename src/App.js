@@ -53,6 +53,7 @@ function Report(props) {
         }));
 
         const csvArray = mergeCSV(csvs);
+        console.log(csvArray)
         console.table(csvArray);
         return csvArray;
     }

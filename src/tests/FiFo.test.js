@@ -34,8 +34,6 @@ describe('FiFo Calculation', () => {
     test('Get possible years (only years with sell trades)', () => {
         const possibleYears = ['2020'];
         const possibleYearsResponse = fifo.getPossibleYears();
-        console.log(possibleYearsResponse);
-
         expect(possibleYearsResponse).toEqual(possibleYears);
     });
 });

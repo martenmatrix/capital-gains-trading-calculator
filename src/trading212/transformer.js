@@ -92,14 +92,22 @@ const Trading212 = (function () {
         const FIFOFormat = convertForFIFOCalculation(withoutDuplicates);
         const fifo = FiFo();
         fifo.setHistory(FIFOFormat);
-        console.table(fifo.getPossibleYears());
     }
 
-    function getCurrencyExchangeFees() {
+    function getCurrencyConversionFees() {
+        const feeKey = getConversionFeeKey(actionsDone);
+        const fees = actionsDone.reduce((currentFee, action) => {
+            if (action[feeKey] !== "") {
+                const fee = parseFloat(action[feeKey]);
+                return currentFee + fee;    
+            }
+            return currentFee;
+        }, 0)
 
+        return fees;
     }
 
-    return { addActions, getFiFo, getCurrencyExchangeFees };
+    return { addActions, getFiFo, getCurrencyConversionFees };
 })()
 
 export default Trading212;
