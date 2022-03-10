@@ -12,7 +12,7 @@ function FileInput(props) {
 
     const onDrop = useCallback(acceptedFiles => {
       setFile(acceptedFiles);
-    }, [])
+    });
     const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop, accept: '.csv', multiple: true})
   
     return (
