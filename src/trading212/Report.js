@@ -2,6 +2,29 @@ import { useEffect, useState } from 'react';
 import Trading212 from './transformer';
 import LoadingAnimation from '../LoadingAnimation';
 
+function Statistics(props) {
+    const year = props.year;
+    const profit = props.profit;
+    const conversionFees = props.conversionFees;
+    const currency = props.currency;
+
+    const madeLoss = (profit <= 0);
+
+    return (
+        <div className="statistics">
+            <div className="information">
+                The following results were calculated with the FiFo method.
+            </div>
+            <div className="fees">
+                You paid a total of {`${conversionFees} ${currency}`} for conversion fees.
+            </div>
+            <div className="profits">
+                You made a {madeLoss ? 'loss' : 'profit'} of {`${Math.abs(profit)} ${currency}`} (fees excluded) in {year}. {madeLoss ? "I'm sorry." : "Good job!"}
+            </div>
+        </div>
+    )
+}
+
 function Trading212Report(props) {
     const csv = props.csv;
     const [possibleYears, setPossibleYears] = useState([]);
@@ -10,6 +33,8 @@ function Trading212Report(props) {
     const [conversionFees, setConversionFees] = useState([]);
     const [currency, setCurrency] = useState();
 
+    const [fifo, setFifo] = useState();
+
     const [currentTask, setCurrentTask] = useState(null);
 
     useEffect(() => {
@@ -17,7 +42,8 @@ function Trading212Report(props) {
         Trading212.addActions(csv);
 
         setCurrentTask('Calculating FiFo');
-        Trading212.calculateFiFo();
+        const fifo = Trading212.calculateFiFo();
+        setFifo(fifo);
 
         setCurrentTask('Getting years');
         const years = Trading212.getYears();
@@ -34,6 +60,9 @@ function Trading212Report(props) {
         setCurrentTask('Getting fees');
         const conversionFees = Trading212.getCurrencyConversionFees(selectedYear);
         setConversionFees(conversionFees);
+
+        setCurrentTask('Getting profits');
+
         setCurrentTask(null);
     }, [selectedYear]);
 
@@ -49,6 +78,15 @@ function Trading212Report(props) {
                     <option value="" hidden disabled>Select a year...</option>
                     {possibleYears.map(year => <option value={year} key={year}>{year}</option>)}
                 </select>
+
+                {selectedYear ? <Statistics year={selectedYear}
+                                            conversionFees={conversionFees}
+                                            profit={20}
+                                            currency={currency}/> : null}
+
+                <div className="donation">
+                    {/* only show how results were calculated */}
+                </div>
             </div>
         )
     } else {

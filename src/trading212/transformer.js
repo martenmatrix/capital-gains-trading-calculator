@@ -94,6 +94,8 @@ const Trading212 = (function () {
         const FIFOFormat = convertForFIFOCalculation(withoutDuplicates);
         const fifo = FiFo();
         fifo.setHistory(FIFOFormat);
+
+        return fifo;
     }
 
     function getCurrencyConversionFees(selectedYear) {

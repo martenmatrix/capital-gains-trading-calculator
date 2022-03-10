@@ -4,6 +4,8 @@ import { getObjectsSortedByDate, getAllYears } from "../misc";
 import { format } from "date-fns";
 
 const FIFOCalculator = () => {
+    const round = (number) => Math.round(number * 100000000000) / 100000000000; // 10 decimals
+
     const data = {
         buyHistory: null,
         sellHistory: null,
@@ -20,8 +22,8 @@ const FIFOCalculator = () => {
 
             const data = {
                 totalExpense: 0,
-                totalIncome: sellAction.totalPrice,
-                amountLeft: sellAction.amount,
+                totalIncome: round(sellAction.totalPrice),
+                amountLeft: round(sellAction.amount),
                 year: format(sellAction.date, 'yyyy'),
                 symbol: sellAction.symbol,
             };
@@ -29,16 +31,15 @@ const FIFOCalculator = () => {
             for (const buyAction of buyHistorySorted) {
                 if (sellAction.symbol !== buyAction.symbol) continue;
 
-                const pricePerShareOfBuyAction = buyAction.totalPrice / buyAction.amount;
-                const buyActionAmountLeft = buyAction.amount - buyAction.amountUsed;
+                const pricePerShareOfBuyAction = round(buyAction.totalPrice / buyAction.amount);
+                const buyActionAmountLeft = round(buyAction.amount - buyAction.amountUsed);
 
                 // choose the maximum available amount to use
                 const buyActionAmountToUse = Math.min(data.amountLeft, buyActionAmountLeft);
 
-                const roundTo10Decimals = (number) => Math.round(number * 100000000000) / 100000000000;
-                const currentTotalExpense = pricePerShareOfBuyAction * buyActionAmountToUse;
-                data.totalExpense = roundTo10Decimals(data.totalExpense + currentTotalExpense);
-                data.amountLeft = roundTo10Decimals(data.amountLeft - buyActionAmountToUse);
+                const currentTotalExpense = round(pricePerShareOfBuyAction * buyActionAmountToUse);
+                data.totalExpense = round(data.totalExpense + currentTotalExpense);
+                data.amountLeft = round(data.amountLeft - buyActionAmountToUse);
 
                 if (data.amountLeft === 0) break;
             }
@@ -46,16 +47,16 @@ const FIFOCalculator = () => {
             expensesAndIncomes.push(data);
         }
 
+        console.table(expensesAndIncomes);
+
         // final check if every sell is done
         const sameLength = sellHistorySorted.length === expensesAndIncomes.length;
         const noAmountLeft = expensesAndIncomes.every((obj) => obj.amountLeft === 0);
         if (!(sameLength && noAmountLeft)) {
-            console.table(expensesAndIncomes);
-            throw new Error('The calculation performed by the application is invalid.');
+            throw new Error('The calculation performed by the application is invalid. This could be due to a missing history e.g. there were more shares sold than bought.');
         } else {
             data.expensesAndIncomes = expensesAndIncomes;
         }
-        console.table(expensesAndIncomes);
     }
 
     function setHistory(objectArray) {
@@ -83,7 +84,20 @@ const FIFOCalculator = () => {
         return getAllYears(data.expensesAndIncomes, 'year');
     }
 
-    return { setHistory, getPossibleYears };
+    function getRealizedProfits(year) {
+        const expensesAndIncomes = data.expensesAndIncomes;
+        const totalProfit = expensesAndIncomes.reduce((currProfit, obj) => {
+            if (obj.year === year) {
+                const profit = round(obj.totalIncome - obj.totalExpense);
+                return round(currProfit + profit);
+            }
+            return currProfit;
+        }, 0);
+
+        return totalProfit;
+    }
+
+    return { setHistory, getPossibleYears, getRealizedProfits };
 }
 
 export default FIFOCalculator;
