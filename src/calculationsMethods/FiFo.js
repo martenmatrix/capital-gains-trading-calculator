@@ -56,9 +56,10 @@ const FIFOCalculator = () => {
                 // choose the maximum available amount to use
                 const buyActionAmountToUse = Math.min(data.amountLeft, buyActionAmountLeft);
 
+                const roundTo10Decimals = (number) => Math.round(number * 100000000000) / 100000000000;
                 const currentTotalExpense = pricePerShareOfBuyAction * buyActionAmountToUse;
-                data.totalExpense += currentTotalExpense;
-                data.amountLeft -= buyActionAmountToUse;
+                data.totalExpense = roundTo10Decimals(data.totalExpense + currentTotalExpense);
+                data.amountLeft = roundTo10Decimals(data.amountLeft - buyActionAmountToUse);
 
                 if (data.amountLeft === 0) break;
             }
@@ -70,13 +71,14 @@ const FIFOCalculator = () => {
         const sameLength = sellHistorySorted.length === expensesAndIncomes.length;
         const noAmountLeft = expensesAndIncomes.every((obj) => obj.amountLeft === 0);
         if (!(sameLength && noAmountLeft)) {
-            throw new Error('The calculation performed by the application is invalid.')
+            console.table(expensesAndIncomes);
+            throw new Error('The calculation performed by the application is invalid.');
         } else {
             return expensesAndIncomes;
         }
     }
     
-    return { addHistory };
+    return { addHistory, getExpensesAndIncomes};
 }
 
 export default FIFOCalculator;

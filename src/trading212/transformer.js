@@ -1,6 +1,5 @@
 // Converts a complete ISO date string in UTC time, the typical format for transmitting a date in JSON, to a JavaScript Date instance.
-import { format } from 'date-fns';
-import { getObjectsSortedByDate } from '../misc';
+import FiFo from '../calculationsMethods/FiFo';
 
 const Trading212 = (function () {
     const actionsDone = [];
@@ -62,11 +61,6 @@ const Trading212 = (function () {
         return removedFees;
     }
 
-    function getRealizedGains(actions, method, years) {
-        if (method === 'fifo') {
-        }
-    }
-
     function convertForFIFOCalculation(actions) {
         const convertedActions = actions.map(action => {
             const convertedAction = {};
@@ -96,6 +90,9 @@ const Trading212 = (function () {
 
         const withoutDuplicates = getActionsWithoutDuplicates(onlySellsAndBuys);
         const FIFOFormat = convertForFIFOCalculation(withoutDuplicates);
+        const fifo = FiFo();
+        fifo.addHistory(FIFOFormat);
+        console.table(fifo.getExpensesAndIncomes());
     }
 
     function getCurrencyExchangeFees() {
