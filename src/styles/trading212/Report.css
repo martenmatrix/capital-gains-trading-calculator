@@ -1,0 +1,41 @@
+.report .statistics {
+    margin-top: 1em;
+    margin-bottom: auto;
+}
+
+.report .donation-banner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+
+    backdrop-filter: blur(50px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@supports not (backdrop-filter: blur(50px)) {
+    .report .donation-banner {
+        background: #00000050;
+    } 
+}
+
+.report .donation-banner .wrapper {
+    font-size: 2.5vmin;
+    margin: 5rem;
+    padding: 5em;
+    border-radius: 25px;
+    background: white;
+}
+
+.report .donation-banner .buttons {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+
+.report .donation-banner .btn {
+    margin-top: 1em;
+}
