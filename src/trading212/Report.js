@@ -6,6 +6,8 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
 import '../styles/trading212/Report.css';
 
+import { analytics } from '../analytics/firebase.js';
+
 function DonationBanner(props) {
     const showAfter = props.showAfter;
     const [isShown, setIsShown] = useState(false);
@@ -16,6 +18,10 @@ function DonationBanner(props) {
         }, showAfter);
     }, [showAfter]);
 
+    function hide(acceptedOffer) {
+        analytics.log('donation_banner_interaction', { wantedToDonate: acceptedOffer });
+    }
+
     if (isShown) return (
         <div className="donation-banner">
             <div className="wrapper">
@@ -23,8 +29,8 @@ function DonationBanner(props) {
                     If this tool saved you some time, consider making a small donation today, because maintaining and hosting this site creates costs. Every penny helps and 100% of your donation immediately goes into this project.
                 </div>
                 <div className="buttons">
-                    <Button size="lg" variant="primary" onClick={() => setIsShown(false)} href="https://www.paypal.com/donate/?hosted_button_id=HSPL5HCL7A6P6" target="_blank" rel="noopener">Donate now!</Button>
-                    <Button size="lg" variant="danger" onClick={() => setIsShown(false)}>No</Button>
+                    <Button size="lg" variant="primary" onClick={() => hide(true)} href="https://www.paypal.com/donate/?hosted_button_id=HSPL5HCL7A6P6" target="_blank" rel="noopener">Donate now!</Button>
+                    <Button size="lg" variant="danger" onClick={() => hide(false)}>No</Button>
                 </div>
             </div>
         </div>
