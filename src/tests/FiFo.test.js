@@ -43,6 +43,8 @@ describe('FiFo Calculation', () => {
     test('Get realized profits for year', () => {
         const round = (number) => Math.round(number * 1000000) / 1000000; // 5 decimals
         const realizedProfits = fifo.getRealizedProfits('2020');
+
+        //TODO add total profits and total loss and them summary
         const actualProfits = 95.23809523809524;
         expect(round(realizedProfits)).toBe(round(actualProfits));
     });
