@@ -4,6 +4,7 @@ import LoadingAnimation from '../LoadingAnimation';
 import Button from 'react-bootstrap/Button';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
+import '../styles/trading212/Report.css';
 
 function DonationBanner(props) {
     const showAfter = props.showAfter;
@@ -17,10 +18,15 @@ function DonationBanner(props) {
 
     if (isShown) return (
         <div className="donation-banner">
-            <div className="text">
-                If this tool saved you some time, consider making a small donation today, because maintaining and hosting this site creates costs. Every penny helps and 100% of your donation immediately goes into this project.
+            <div className="wrapper">
+                <div className="text">
+                    If this tool saved you some time, consider making a small donation today, because maintaining and hosting this site creates costs. Every penny helps and 100% of your donation immediately goes into this project.
+                </div>
+                <div className="buttons">
+                    <Button size="lg" variant="primary" onClick={() => setIsShown(false)} href="https://www.paypal.com/donate/?hosted_button_id=HSPL5HCL7A6P6" target="_blank" rel="noopener">Donate now!</Button>
+                    <Button size="lg" variant="danger" onClick={() => setIsShown(false)}>No</Button>
+                </div>
             </div>
-            <Button size="lg" variant="primary" href="https://www.paypal.com/donate/?hosted_button_id=HSPL5HCL7A6P6">Donate now!</Button>
         </div>
     );
     else return null;
@@ -50,9 +56,6 @@ function Statistics(props) {
             <div className="fees">
                 You paid a total of {`${conversionFees} ${currency}`} for conversion fees.
             </div>
-            <pre>
-                <code>{JSON.stringify(fifoData, null, 2)}</code>
-            </pre>
         </div>
     )
 }
@@ -119,6 +122,8 @@ function Trading212Report(props) {
                                             conversionFees={conversionFees}
                                             fifoData={fifoData}
                                             currency={currency}/> : null}
+
+                {selectedYear ? <DonationBanner showAfter={20000}/> : null}
             </div>
         )
     } else {
