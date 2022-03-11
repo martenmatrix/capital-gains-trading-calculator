@@ -23,8 +23,15 @@ describe('FiFo Calculation', () => {
                     symbol: 'FIRST',
                     type: 'SELL', // 2.857142857142857 per 1 share
                 },
+                {
+                    amount: 5.5,
+                    date: new Date('2020-02-01'),
+                    totalPrice: 5,
+                    symbol: 'FIRST',
+                    type: 'SELL', // 0.9090909090909091 per 1 share
+                }
                 // for first buy 85.71428571428572 profit
-                // for second buy 9.523809523809526 profit
+                // for second buy 9.523809523809526 profit (first sell) | -0.23809523809523814 profit (second sell)
                 // +95.23809523809524 profit
         ]
 
@@ -44,8 +51,11 @@ describe('FiFo Calculation', () => {
         const round = (number) => Math.round(number * 1000000) / 1000000; // 5 decimals
         const realizedProfits = fifo.getRealizedProfits('2020');
 
-        //TODO add total profits and total loss and them summary
-        const actualProfits = 95.23809523809524;
-        expect(round(realizedProfits)).toBe(round(actualProfits));
+        const totalProfits = 95;
+        expect(round(realizedProfits.total)).toBe(round(totalProfits));
+        const actualIncomes = 95.23809523809524;
+        expect(round(realizedProfits.income)).toBe(round(actualIncomes));
+        const actualLosses = -0.23809523809523814;
+        expect(round(realizedProfits.loss)).toBe(round(actualLosses));
     });
 });

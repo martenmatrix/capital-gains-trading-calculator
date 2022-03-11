@@ -40,6 +40,7 @@ const FIFOCalculator = () => {
                 const currentTotalExpense = round(pricePerShareOfBuyAction * buyActionAmountToUse);
                 data.totalExpense = round(data.totalExpense + currentTotalExpense);
                 data.amountLeft = round(data.amountLeft - buyActionAmountToUse);
+                buyAction.amountUsed = buyActionAmountToUse;
 
                 if (data.amountLeft === 0) break;
             }
