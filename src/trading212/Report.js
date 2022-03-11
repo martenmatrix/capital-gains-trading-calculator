@@ -20,6 +20,7 @@ function DonationBanner(props) {
 
     function hide(acceptedOffer) {
         analytics.log('donation_banner_interaction', { wantedToDonate: acceptedOffer });
+        setIsShown(false);
     }
 
     if (isShown) return (
@@ -100,6 +101,7 @@ function Trading212Report(props) {
 
     useEffect(() => {
         if (!fifo) return;
+        analytics.log('calculate_year', { year: selectedYear, method: 'fifo' });
 
         setCurrentTask('Getting fees');
         const conversionFees = Trading212.getCurrencyConversionFees(selectedYear);
