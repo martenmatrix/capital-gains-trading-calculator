@@ -51,7 +51,7 @@ function Statistics(props) {
             </div>
             <div className="profits">
                 You made a {madeLoss ? 'loss' : 'profit'} of {`${Math.abs(profit)} ${currency}`} (fees excluded) in {year}. {madeLoss ? "I'm sorry. " : "Good job! "}
-                Your profit consist of a loss of {`${Math.abs(loss)} ${currency}`} and an income of {`${Math.abs(income)} ${currency}`}.
+                Your profit consists of a loss of {`${Math.abs(loss)} ${currency}`} and an income of {`${Math.abs(income)} ${currency}`}.
             </div>
             <div className="fees">
                 You paid a total of {`${conversionFees} ${currency}`} for conversion fees.
