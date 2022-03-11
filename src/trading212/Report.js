@@ -33,7 +33,7 @@ function Trading212Report(props) {
     const [conversionFees, setConversionFees] = useState([]);
     const [currency, setCurrency] = useState();
 
-    const [fifo, setFifo] = useState();
+    const [, setFifo] = useState();
 
     const [currentTask, setCurrentTask] = useState(null);
 
