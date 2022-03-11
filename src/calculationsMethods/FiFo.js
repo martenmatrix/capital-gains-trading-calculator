@@ -84,23 +84,27 @@ const FIFOCalculator = () => {
         return getAllYears(data.expensesAndIncomes, 'year');
     }
 
-    function getLosses() {
-
-    }
-    
-    function getProfits() {
-        
-    }
-
     function getRealizedProfits(year) {
         const expensesAndIncomes = data.expensesAndIncomes;
-        const totalProfit = expensesAndIncomes.reduce((currProfit, obj) => {
+        const totalProfit = expensesAndIncomes.reduce((currData, obj) => {
+            const newData = {...currData};
             if (obj.year === year) {
                 const profit = round(obj.totalIncome - obj.totalExpense);
-                return round(currProfit + profit);
+                if (profit < 0) {
+                    newData.loss = round(currData.loss + profit);
+                } else {
+                    newData.income = round(currData.income + profit);
+                }
+
+                newData.total = round(currData.total + profit);
             }
-            return currProfit;
-        }, 0);
+            return newData;
+        },
+        {
+            total: 0,
+            income: 0,
+            loss: 0,
+        });
 
         return totalProfit;
     }
