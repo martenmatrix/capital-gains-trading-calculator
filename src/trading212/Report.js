@@ -62,6 +62,7 @@ function Trading212Report(props) {
         setConversionFees(conversionFees);
 
         setCurrentTask('Getting profits');
+        
 
         setCurrentTask(null);
     }, [selectedYear]);
