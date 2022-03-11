@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import Trading212 from './transformer';
 import LoadingAnimation from '../LoadingAnimation';
 import Button from 'react-bootstrap/Button';
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import Dropdown from 'react-bootstrap/Dropdown';
 
 function DonationBanner(props) {
     const showAfter = props.showAfter;
@@ -101,18 +103,17 @@ function Trading212Report(props) {
         setCurrentTask(null);
     }, [fifo, selectedYear]);
 
-    function handleChange(e) {
-        const selectedYear = e.target.value;
+    function handleChange(eventKey) {
+        const selectedYear = eventKey;
         setSelectedYear(selectedYear);
     }
 
     if (currentTask === null) {
         return (
             <div className="report">
-                <select name="years" value={selectedYear} onChange={handleChange}>
-                    <option value="" hidden disabled>Select a year...</option>
-                    {possibleYears.map(year => <option value={year} key={year}>{year}</option>)}
-                </select>
+                <DropdownButton name="years" title={selectedYear ? selectedYear : 'Select a year...'} onSelect={handleChange}>
+                    {possibleYears.map(year => <Dropdown.Item eventKey={year} key={year}>{year}</Dropdown.Item>)}
+                </DropdownButton>
 
                 {selectedYear ? <Statistics year={selectedYear}
                                             conversionFees={conversionFees}
