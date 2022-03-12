@@ -67,7 +67,7 @@ function mergeCSV(csvs) {
 function csvTextToArray(str, delimiter = ",") {
     const headers = str.slice(0, str.indexOf("\n")).split(delimiter);
 
-    const rows = str.slice(str.indexOf("\n") + 1).split("\n");
+    const rows = str.slice(str.indexOf("\n") + 1).split(/\n(?=.)/); // split regex matches only newlines, if there is a character behind it
 
     const arr = rows.map(function (row) {
       const values = row.split(delimiter);
