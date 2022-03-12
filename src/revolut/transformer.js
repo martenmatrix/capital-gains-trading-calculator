@@ -43,8 +43,8 @@ const Revolut = (function () {
                 const humanReadableDate = format(parsedDate, 'PPPPpppp');
 
                 const stringPrice = prompt(`You ${isBuy ? 'bought' : 'sold'} some ${assetCurrency} `+
-                `at approx. ${humanReadableDate}. Please enter the price you've`+
-                `${isBuy ? 'paid for' : 'got for selling'} that asset in ${getCurrency()}`)
+                `at approx. ${humanReadableDate}. Please enter the price you've `+
+                `${isBuy ? 'paid for' : 'got for selling'} that asset in ${getCurrency()}.`)
                 const price = parseFloat(stringPrice.replace(',', '.'));
                 return price;
             }
