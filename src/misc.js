@@ -122,8 +122,10 @@ function getAllYears(objects, yearKey) {
     objects.forEach(object => {
         let date = object[yearKey];
 
-        let year = date;
         // check if already formatted
+        if (isDate(date)) {
+            date = format(date, 'yyyy');
+        }
         if (year.length !== 4) {
             if (!isDate(date)) {
                 date = parseJSON(date);
