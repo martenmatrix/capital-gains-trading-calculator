@@ -1,12 +1,18 @@
-import { convertDateStringsToDateObjects, getAllYears } from '../misc';
+import { getAllYears } from '../misc';
+import { parseJSON, format } from 'date-fns';
 
 const Revolut = (function () {
     const actionsDone = [];
+    let buysAndSells = {
+        buys: [],
+        sells: []
+    }
     
     function addAction(...actions) {
         for (const action of actions) {
             actionsDone.push(action);
         }
+        getBuysAndSells();
     }
 
     function getSpecificActions(key, value) {
@@ -22,7 +28,7 @@ const Revolut = (function () {
 
     function getBuysAndSells() {
         const exchanges = getSpecificActions('Type', 'EXCHANGE');
-        const buysAndSells = {
+        const newObject = {
             buys: [],
             sells: []
         }
@@ -32,9 +38,13 @@ const Revolut = (function () {
             const isBuy = (assetCurrency === exchangedTo) ? true : false;
 
             const getPrice = (isBuy) => {
-                const stringPrice = prompt(`Hey you ${isBuy ? 'bought' : 'sold'} some shares 
-                at approx. ${exchange['Completed Date']}. Please enter the price you've 
-                ${isBuy ? 'paid for' : 'got for selling'} that asset in ${getCurrency()}`)
+                const completedDate = exchange['Completed Date'];
+                const parsedDate = parseJSON(completedDate);
+                const humanReadableDate = format(parsedDate, 'PPPPpppp');
+
+                const stringPrice = prompt(`You ${isBuy ? 'bought' : 'sold'} some ${assetCurrency} `+
+                `at approx. ${humanReadableDate}. Please enter the price you've`+
+                `${isBuy ? 'paid for' : 'got for selling'} that asset in ${getCurrency()}`)
                 const price = parseFloat(stringPrice.replace(',', '.'));
                 return price;
             }
@@ -45,15 +55,15 @@ const Revolut = (function () {
                 currency: getCurrency(),
             }
             if (isBuy) {
-                buysAndSells.buys.push({ ...exchange, ...total });
+                newObject.buys.push({ ...exchange, ...total });
             } else if (!isBuy) {
-                buysAndSells.buys.push({ ...exchange, ...total });
+                newObject.buys.push({ ...exchange, ...total });
             }
         });
-        return buysAndSells;
+        buysAndSells = newObject;
     }
 
-    function getFees() {
+    function getFees(year) {
 
     }
 
