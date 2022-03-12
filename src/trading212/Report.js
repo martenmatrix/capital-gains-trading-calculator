@@ -61,6 +61,7 @@ function Trading212Report(props) {
         currentTask={currentTask}
         selectedYear={selectedYear}
         years={possibleYears}
+        fees={conversionFees}
         fifoData={fifoData}
         currency={currency}
     />
