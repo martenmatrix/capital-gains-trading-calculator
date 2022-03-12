@@ -126,9 +126,11 @@ function getAllYears(objects, yearKey) {
         // check if already formatted
         if (isDate(date)) {
             year = format(date, 'yyyy');
-        } else if (!date.length === 4) {
-            date = parseJSON(date);
-            year = format(date, 'yyyy');
+        } else if (date.length === 4) {
+            year = date;
+        } else {
+            const parsedDate = parseJSON(date);
+            year = format(parsedDate, 'yyyy');
         }
 
         if (!possibleYears.includes(year)) {
