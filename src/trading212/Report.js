@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react';
 import Trading212 from './transformer';
 import FiFoReport from '../calculationsMethods/FiFoReport';
 
-import '../styles/trading212/Report.css';
-
 import { analytics } from '../analytics/firebase.js';
 
 function Trading212Report(props) {
