@@ -6,6 +6,7 @@ import './styles/App.css';
 
 // Reports
 import Trading212Report from './trading212/Report';
+import RevolutReport from './revolut/Report';
 
 function FileInput(props) {
     const [, setFile] = props.fileState;
@@ -39,10 +40,14 @@ function InformationBanner() {
     )
 }
 
+function getReportStyle(CSVArray) {
+    return prompt('Enter your platform: [revolut, trading212]');
+}
+
 function Report(props) {
     const[CSVArray, setCSVArray] = useState(null);
     const files = props.files;
-    const reportStyle = 'trading212';
+    const [reportStyle, setReportStyle] = useState();
 
     useEffect(() => {
         async function getAndSetCSVArray() {
@@ -62,10 +67,20 @@ function Report(props) {
         getAndSetCSVArray();
     }, [files]);
 
-    const renderResults = () => {
+
+    useEffect(() => {
         if (CSVArray) {
+            const reportStyle = getReportStyle(CSVArray);
+            setReportStyle(reportStyle);
+        }
+    }, [CSVArray])
+
+    const renderResults = () => {
+        if (CSVArray && reportStyle) {
             if (reportStyle === 'trading212') {
                 return <Trading212Report csv={CSVArray} />
+            } else if (reportStyle === 'revolut') {
+                return <RevolutReport csv={CSVArray} />
             }
         } else {
             return <LoadingAnimation task="Generating CSV-Array"/>
