@@ -121,15 +121,13 @@ function getAllYears(objects, yearKey) {
     const possibleYears = [];
     objects.forEach(object => {
         let date = object[yearKey];
+        let year;
 
         // check if already formatted
         if (isDate(date)) {
-            date = format(date, 'yyyy');
-        }
-        if (year.length !== 4) {
-            if (!isDate(date)) {
-                date = parseJSON(date);
-            }
+            year = format(date, 'yyyy');
+        } else if (!date.length === 4) {
+            date = parseJSON(date);
             year = format(date, 'yyyy');
         }
 
