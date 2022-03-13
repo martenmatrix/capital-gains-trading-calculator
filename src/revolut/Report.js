@@ -50,6 +50,7 @@ function RevolutReport(props) {
         years={years}
         selectedYear={selectedYear}
         currency={currency}
+        fifoData={FiFoData}
     />;
 };
 

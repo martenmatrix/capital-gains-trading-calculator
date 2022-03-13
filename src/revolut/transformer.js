@@ -94,9 +94,9 @@ const Revolut = (function () {
     function convertForFiFo() {
         const convertedActions = buysAndSells.map(action => {
             return {
-                amount: action.total.amount - action.total.fees,
+                amount: Math.abs(parseFloat(action.Amount)) - parseFloat(action.Fee),
                 date: parseJSON(action['Completed Date']),
-                totalPrice: action.total.amount,
+                totalPrice: action.total.amount - action.total.fees,
                 symbol: action.Currency,
                 type: action.type,
             }

@@ -41,7 +41,7 @@ function DonationBanner(props) {
 function Statistics(props) {
     const year = props.year;
     const fifoData = props.fifoData;
-    const round = (number) => Math.round(number * 1000) / 1000;
+    const round = (number) => Math.round(number * 100) / 100;
     const profit = round(fifoData.total);
     const income = round(fifoData.income);
     const loss = round(fifoData.loss);
