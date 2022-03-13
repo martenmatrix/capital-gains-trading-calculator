@@ -10,7 +10,7 @@ function RevolutReport(props) {
 
     useEffect(() => {
         setTask('Adding trading history')
-        Revolut.addAction(...csvArray);
+        Revolut.addAction(undefined, ...csvArray);
 
         setTask('Getting possible years')
         const possibleYears = Revolut.getYears();

@@ -3,16 +3,13 @@ import { parseJSON, format } from 'date-fns';
 
 const Revolut = (function () {
     const actionsDone = [];
-    let buysAndSells = {
-        buys: [],
-        sells: []
-    }
+    let buysAndSells = []
     
-    function addAction(...actions) {
+    function addAction(promptFunction = prompt, ...actions) {
         for (const action of actions) {
             actionsDone.push(action);
         }
-        getBuysAndSells();
+        getBuysAndSells(promptFunction);
     }
 
     function getSpecificActions(key, value) {
@@ -26,12 +23,9 @@ const Revolut = (function () {
         return filteredActions;
     }
 
-    function getBuysAndSells() {
+    function getBuysAndSells(promptFunction) {
         const exchanges = getSpecificActions('Type', 'EXCHANGE');
-        const newObject = {
-            buys: [],
-            sells: []
-        }
+        const newArray = [];
         exchanges.forEach((exchange) => {
             const exchangedTo = exchange.Description.match(/Exchanged to ([A-Z]{3})/)[1];
             const assetCurrency = exchange.Currency;
@@ -41,30 +35,42 @@ const Revolut = (function () {
                 const completedDate = exchange['Completed Date'];
                 const parsedDate = parseJSON(completedDate);
                 const humanReadableDate = format(parsedDate, 'PPPPpppp');
+                const buyPrice = parseFloat(exchange['Amount']) - parseFloat(exchange['Fee']);
 
-                const stringPrice = prompt(`You ${isBuy ? 'bought' : 'sold'} some ${assetCurrency} `+
+                const stringPrice = promptFunction(`You ${isBuy ? 'bought' : 'sold'} ${Math.abs(buyPrice)} ${assetCurrency} `+
                 `at approx. ${humanReadableDate}. Please enter the price you've `+
                 `${isBuy ? 'paid for' : 'got for selling'} that asset in ${getCurrency()}.`)
                 const price = parseFloat(stringPrice.replace(',', '.'));
-                return price;
+
+                return parseFloat(price);
             }
 
             const price = getPrice(isBuy);
             const total = {
                 amount: price,
+                fees: parseFloat(exchange.Fee) / parseFloat(exchange.Amount) * price,
                 currency: getCurrency(),
             }
-            if (isBuy) {
-                newObject.buys.push({ ...exchange, ...total });
-            } else if (!isBuy) {
-                newObject.buys.push({ ...exchange, ...total });
-            }
+            newArray.push({ ...exchange, total, type: isBuy ? 'BUY' : 'SELL' });
         });
-        buysAndSells = newObject;
+        buysAndSells = newArray;
     }
 
-    function getFees(year) {
+    function getFees(selectedYear) {
+        const totalFees = buysAndSells.reduce((totalFees, action) => {
+            const date = parseJSON(action['Completed Date']);
+            const year = format(date, 'yyyy');
+            if (year !== selectedYear) return totalFees;
 
+            const price = action.total.amount;
+            const feesInAsset = parseFloat(action.Fee);
+            const amountBoughtOrSold = Math.abs(parseFloat(action.Amount));
+
+            const feesPercentage = feesInAsset / amountBoughtOrSold;
+            const fees = feesPercentage * price;
+            return totalFees += fees;
+        }, 0);
+        return totalFees;
     }
 
     function getYears() {
@@ -84,7 +90,27 @@ const Revolut = (function () {
         }
     }
 
-    return { addAction, getFees, getYears, getCurrency };
+    function convertForFiFo() {
+        const convertedBuys = buysAndSells.buys.map(buy => {
+            return {
+                amount: buy.total.amount - buy.total.fees,
+                date: parseJSON(buy['COMPLETED']),
+                totalPrice: buy.total.amount,
+                symbol: 0,
+                type: 'BUY',
+            }
+        });
+        const convertedSells = buysAndSells.sells;
+
+
+        return [...convertedBuys, ...convertedSells];
+    }
+
+    function getFiFo() {
+
+    }
+
+    return { addAction, getFees, getYears, getCurrency, getFiFo };
 })();
 
 export default Revolut;
