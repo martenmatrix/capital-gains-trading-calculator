@@ -45,7 +45,7 @@ function Statistics(props) {
     const profit = round(fifoData.total);
     const income = round(fifoData.income);
     const loss = round(fifoData.loss);
-    const conversionFees = props.conversionFees;
+    const conversionFees = round(props.conversionFees);
     const currency = props.currency;
 
     const madeLoss = (profit <= 0);
