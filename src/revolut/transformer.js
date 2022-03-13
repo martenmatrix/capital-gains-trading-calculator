@@ -1,5 +1,6 @@
 import { getAllYears } from '../misc';
 import { parseJSON, format } from 'date-fns';
+import FIFOCalculator from '../calculationsMethods/FiFo';
 
 const Revolut = (function () {
     const actionsDone = [];
@@ -91,23 +92,25 @@ const Revolut = (function () {
     }
 
     function convertForFiFo() {
-        const convertedBuys = buysAndSells.buys.map(buy => {
+        const convertedActions = buysAndSells.map(action => {
             return {
-                amount: buy.total.amount - buy.total.fees,
-                date: parseJSON(buy['COMPLETED']),
-                totalPrice: buy.total.amount,
-                symbol: 0,
-                type: 'BUY',
+                amount: action.total.amount - action.total.fees,
+                date: parseJSON(action['Completed Date']),
+                totalPrice: action.total.amount,
+                symbol: action.Currency,
+                type: action.type,
             }
         });
-        const convertedSells = buysAndSells.sells;
 
 
-        return [...convertedBuys, ...convertedSells];
+        return convertedActions;
     }
 
     function getFiFo() {
-
+        const fifo = FIFOCalculator();
+        const actions = convertForFiFo();
+        fifo.setHistory(actions);
+        return fifo;
     }
 
     return { addAction, getFees, getYears, getCurrency, getFiFo };
