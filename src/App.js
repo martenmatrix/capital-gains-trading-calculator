@@ -41,7 +41,38 @@ function InformationBanner() {
 }
 
 function getReportStyle(CSVArray) {
-    return prompt('Enter your platform: [revolut, trading212]');
+    const keys = Object.keys(CSVArray[0]);
+    const revolutKeys = [ "Type", "Product", "Started Date", "Completed Date", "Description", "Amount", "Fee", "Currency", "State", "Balance" ];
+    const trading212Keys = [ "Action", "Time", "ISIN", "Ticker", "Name", "No. of shares", "Price / share", "Currency (Price / share)", "Exchange rate", "Result (EUR)", "Total (EUR)", "Charge amount (EUR)", "Stamp duty reserve tax (EUR)", "Notes", "ID", "Currency conversion fee (EUR)" ];
+    
+    const getNumberOfSameItems = (array1, array2) => {
+        const matches = array1.filter((entry) => {
+            return array2.includes(entry);
+        });
+
+        return matches.length;
+    }
+
+    const reportStyles = [{
+        type: 'revolut',
+        keys: revolutKeys
+    }, {
+        type: 'trading212',
+        keys: trading212Keys
+    }];
+
+    const selectedStyle = reportStyles.reduce((oldReport, newReport) => {
+        const matches = getNumberOfSameItems(keys, newReport.keys);
+        if (matches > oldReport.matches) {
+            return { ...newReport, matches }
+        } else {
+            return oldReport;
+        }
+
+    }, { matches: 0 });
+
+    console.log(`Auto-select ${selectedStyle.type} as style for report`);
+    return selectedStyle.type;
 }
 
 function Report(props) {
