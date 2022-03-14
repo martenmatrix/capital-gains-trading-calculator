@@ -4,12 +4,14 @@ import FIFOCalculator from '../calculationsMethods/FiFo';
 
 const Revolut = (function () {
     const actionsDone = [];
+    let currency = null;
     let buysAndSells = []
     
     function addAction(promptFunction = prompt, ...actions) {
         for (const action of actions) {
             actionsDone.push(action);
         }
+        currency = getCurrency(true);
         getBuysAndSells(promptFunction);
     }
 
@@ -40,7 +42,7 @@ const Revolut = (function () {
 
                 const stringPrice = promptFunction(`You ${isBuy ? 'bought' : 'sold'} ${Math.abs(buyPrice)} ${assetCurrency} `+
                 `at approx. ${humanReadableDate}. Please enter the price you've `+
-                `${isBuy ? 'paid for' : 'got for selling'} that asset in ${getCurrency()}.`)
+                `${isBuy ? 'paid for' : 'got for selling'} that asset in ${currency}.`)
                 const price = parseFloat(stringPrice.replace(',', '.'));
 
                 return parseFloat(price);
@@ -50,7 +52,7 @@ const Revolut = (function () {
             const total = {
                 amount: price,
                 fees: parseFloat(exchange.Fee) / parseFloat(exchange.Amount) * price,
-                currency: getCurrency(),
+                currency: currency
             }
             newArray.push({ ...exchange, total, type: isBuy ? 'BUY' : 'SELL' });
         });
@@ -78,17 +80,24 @@ const Revolut = (function () {
         return getAllYears(actionsDone, 'Completed Date');
     }
 
-    function getCurrency() {
-        // TODO this might not work, if user has multiple currencies on his account 
+    function getCurrency(forceRefresh = false) {
+        if (!forceRefresh && currency) {
+            return currency;
+        }
+
+        // TODO this might not work, if user has multiple currencies on his account
         const notValid = ['XAG', 'XAU'];
         const regex = /Exchanged to ([A-Z]{3})/;
         for (const trade of actionsDone) {
             const description = trade.Description;
-            const currency = description.match(regex)[1];
+            const matches = description.match(regex);
+            if (matches === null) continue;
+            const currency = matches[1];
             if (!notValid.includes(currency)) {
                 return currency;
             }
         }
+        return prompt('What is your currency on your Revolut account e.g. EUR, USD?')
     }
 
     function convertForFiFo() {
