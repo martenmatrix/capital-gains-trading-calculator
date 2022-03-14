@@ -29,9 +29,9 @@ The application is hosted at the following addresses:
 	>:warning: **Currently only XAU/XAG assets are supported.**
 
 	Download the CSV files from your Revolut app (Hub > Commodities > Select Silver or Gold > Statment). Select the maximum possible timeframe.
-
-2. Select all files you've downloaded **at once** and upload them. Hold `CTRL`, while clicking files to select multiple.
-3. If everything went fine, you should now be able to select a year. :tada:
+2. The application will automatically detect from which platform the files are. However, don't mix files from Revolut with files from Trading212 and vice versa.
+3. Select all files you've downloaded **at once** and upload them. Hold `CTRL`, while clicking files to select multiple. If you've uploaded Revolut files, you'll need to enter some missing data, which you can find in your app.
+4. If everything went fine, you should now be able to select a year. :tada:
 If not, please [create an issue](https://github.com/martenmatrix/capital-gains-trading-calculator/issues/new).
 
 ## :sparkles: Features
