@@ -1,0 +1,38 @@
+.error-handler {
+    width: 100%;
+    height: 100%;
+
+    background: rgb(189, 40, 40);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.error-handler .wrapper {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.error-handler .wrapper .warning-symbol {
+    font-size: 25vmin;
+}
+
+.error-handler .wrapper .text {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    width: 80%;
+}
+
+.error-handler .wrapper .text * {
+    font-size: max(2rem, 3vmin);
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    line-height: 1.2;
+}

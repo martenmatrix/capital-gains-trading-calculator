@@ -1,5 +1,5 @@
-import { useEffect, useState, useCallback } from 'react'
-import { useDropzone } from 'react-dropzone'
+import { useEffect, useState, useCallback } from 'react';
+import { useDropzone } from 'react-dropzone';
 import { getFileAsText, mergeCSV, csvTextToArray } from './misc';
 import LoadingAnimation from './LoadingAnimation';
 import './styles/App.css';
