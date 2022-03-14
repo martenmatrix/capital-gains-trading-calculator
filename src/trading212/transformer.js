@@ -111,7 +111,8 @@ const Trading212 = (function () {
                 return currentFee;
             }
 
-            if (action[feeKey] !== "") {
+            const fee = action[feeKey];
+            if (fee) {
                 const fee = parseFloat(action[feeKey]);
                 return currentFee + fee;    
             }
