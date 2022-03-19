@@ -7,12 +7,12 @@ const Revolut = (function () {
     let currency = null;
     let buysAndSells = []
     
-    function addAction(promptFunction = prompt, ...actions) {
+    function addAction(...actions) {
         for (const action of actions) {
             actionsDone.push(action);
         }
         currency = getCurrency(true);
-        getBuysAndSells(promptFunction);
+        getBuysAndSells();
     }
 
     function getSpecificActions(key, value) {
@@ -26,7 +26,7 @@ const Revolut = (function () {
         return filteredActions;
     }
 
-    function getBuysAndSells(promptFunction) {
+    function getBuysAndSells() {
         const exchanges = getSpecificActions('Type', 'EXCHANGE');
         const newArray = [];
         exchanges.forEach((exchange) => {
@@ -40,7 +40,7 @@ const Revolut = (function () {
                 const humanReadableDate = format(parsedDate, 'PPPPpppp');
                 const buyPrice = parseFloat(exchange['Amount']) - parseFloat(exchange['Fee']);
 
-                const stringPrice = promptFunction(`You ${isBuy ? 'bought' : 'sold'} ${Math.abs(buyPrice)} ${assetCurrency} `+
+                const stringPrice = prompt(`You ${isBuy ? 'bought' : 'sold'} ${Math.abs(buyPrice)} ${assetCurrency} `+
                 `at approx. ${humanReadableDate}. Please enter the price you've `+
                 `${isBuy ? 'paid for' : 'got for selling'} that asset in ${currency}.`)
                 const price = parseFloat(stringPrice.replace(',', '.'));
