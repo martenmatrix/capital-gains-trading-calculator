@@ -40,7 +40,7 @@ If not, please [create an issue](https://github.com/martenmatrix/capital-gains-t
 - calculate realized incomes and losses with the first-in first-out method in specific timeframe
 
 ## :wrench: Installation
-If you want to run the application on your local pc or just want to contribute do the following steps:
+If you want to run the application on your local pc or just want to contribute, do the following steps:
 1. Clone the repository.
 `git clone https://github.com/martenmatrix/capital-gains-trading-calculator`
 2. Install the dependencies.
