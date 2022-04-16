@@ -38,6 +38,7 @@ If not, please [create an issue](https://github.com/martenmatrix/capital-gains-t
 - automatically detects origin of CSV
 - calculate conversion fees in specific timeframe
 - calculate realized incomes and losses with the first-in first-out method in specific timeframe
+- error boundary
 
 ## :wrench: Installation
 If you want to run the application on your local pc or just want to contribute, do the following steps:
