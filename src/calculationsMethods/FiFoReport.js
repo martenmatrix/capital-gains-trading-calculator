@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { analytics } from '../analytics/firebase.js';
 import Button from 'react-bootstrap/Button';
 import LoadingAnimation from '../LoadingAnimation';
 import DropdownButton from 'react-bootstrap/DropdownButton';
@@ -18,7 +17,6 @@ function DonationBanner(props) {
     }, [showAfter]);
 
     function hide(acceptedOffer) {
-        analytics.log('donation_banner_interaction', { wantedToDonate: acceptedOffer });
         setIsShown(false);
     }
 
