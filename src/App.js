@@ -33,7 +33,7 @@ function InformationBanner() {
     return (
         <div className="information-banner">
             <div className="text">
-            Create a CSV file from Trading 212 like <a href="https://helpcentre.trading212.com/hc/en-us/articles/360016898917-Can-I-export-the-trading-data-from-my-account-" target="_blank" rel="noreferrer">this</a>. Export your whole trading history in 12 months CSV's and drop/select them all at once. All uploaded files stay on your PC. You can find the code of this application or report issues and suggestions <a href="https://github.com/martenmatrix/trading212-tax-generator" target="_blank" rel="noreferrer">here</a> or <a href="mailto:01feature-toffee@icloud.com" target="_blank" rel="noreferrer">just write me a mail!</a>.
+            Create a CSV file from Trading 212 like <a href="https://helpcentre.trading212.com/hc/en-us/articles/360016898917-Can-I-export-the-trading-data-from-my-account-" target="_blank" rel="noreferrer">this</a>. Export your whole trading history in 12 months CSV's and drop/select them all at once. All uploaded files stay on your PC. You can find the code of this application or report issues and suggestions <a href="https://github.com/martenmatrix/trading212-tax-generator" target="_blank" rel="noreferrer">here</a> or <a href="mailto:01feature-toffee@icloud.com" target="_blank" rel="noreferrer">just write me a mail</a>!
             </div>
         </div>
     )
