@@ -36,6 +36,7 @@ If not, please [create an issue](https://github.com/martenmatrix/capital-gains-t
 
 ## :sparkles: Features
 - automatically detects origin of CSV
+- removes duplicated entries automatically
 - calculate conversion fees in specific timeframe
 - calculate realized incomes and losses with the first-in first-out method in specific timeframe
 - error boundary
