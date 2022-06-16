@@ -84,8 +84,9 @@ const Trading212 = (function () {
             convertedAction.totalPrice = parseFloat(action[getTotalCurrencyKey(actions)]);
             convertedAction.symbol = action.Ticker;
             const getAction = () => {
-                if (action.Action === 'Market buy') return 'BUY';
-                else if (action.Action === 'Market sell') return 'SELL';
+                // TODO add test for limit buy stop buy limit sell stop sell
+                if (action.Action === 'Market buy' || action.Action === 'Limit buy' || action.Action === 'Stop buy') return 'BUY';
+                else if (action.Action === 'Market sell' || action.Action === 'Limit sell' || action.Action === 'Stop sell') return 'SELL';
                 else return action.Action;
             }
             convertedAction.type = getAction();
