@@ -631,7 +631,7 @@ const tradingHistory = [
     },
     {
       "Action": "Market buy",
-      "Time": "2021-07-19 13:30:09",
+      "Time": "19/07/2021 13:30",
       "ISIN": "US88160R1014",
       "Ticker": "TSLA",
       "Name": "\"Tesla\"",

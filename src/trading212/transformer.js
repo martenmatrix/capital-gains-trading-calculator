@@ -1,13 +1,26 @@
 // Converts a complete ISO date string in UTC time, the typical format for transmitting a date in JSON, to a JavaScript Date instance.
 import FiFo from '../calculationsMethods/FiFo';
-import { parseJSON, format } from 'date-fns';
+import { parseJSON, format, parse } from 'date-fns';
 import { getAllYears } from '../misc';
 
 const Trading212 = (function () {
     const actionsDone = [];
 
+    function convertDateToJSONFormat(date) {
+        // TODO specific date conversions should always happen directly in the functional component
+        const dateObject = parse(date, 'dd-MM-yyyy kk:mm', new Date());
+        return JSON.stringify(dateObject);
+    }
+
     function addActions(actions) {
-        actionsDone.push(...actions);
+        const actionsWithConvertedDates = actions.map(action => {
+            if (action.Time.length < 19) {
+                const dateStringWithoutBackslash = action.Time.replaceAll('/', '-');
+                action.Time = convertDateToJSONFormat(dateStringWithoutBackslash);
+            }
+            return action;
+        });
+        actionsDone.push(...actionsWithConvertedDates);
     }
 
     function getActionsWithoutDuplicates(actions) {
