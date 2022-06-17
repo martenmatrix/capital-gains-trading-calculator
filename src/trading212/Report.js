@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import Trading212 from './transformer';
 import FiFoReport from '../calculationsMethods/FiFoReport';
 
+import { analytics } from '../analytics/firebase.js';
+
 function Trading212Report(props) {
     const csv = props.csv;
     const [possibleYears, setPossibleYears] = useState([]);
@@ -36,6 +38,7 @@ function Trading212Report(props) {
 
     useEffect(() => {
         if (!fifo) return;
+        analytics.log('calculate_year', { year: selectedYear, method: 'fifo' });
 
         setCurrentTask('Getting fees');
         const conversionFees = Trading212.getCurrencyConversionFees(selectedYear);

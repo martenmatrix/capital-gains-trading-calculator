@@ -55,7 +55,7 @@ If you want to run the application on your local pc or just want to contribute, 
 - **Create React App** v5.0.0
 - **Jest** v27.5.1
 - **Bootstrap** v5.1.3
-- **Firebase** (Hosting) v9.6.8
+- **Firebase** (Hosting, Analytics) v9.6.8
 
 ## :scroll: License
 [MIT](https://github.com/martenmatrix/capital-gains-trading-calculator/blob/master/LICENSE)

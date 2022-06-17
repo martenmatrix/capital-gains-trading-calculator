@@ -1,6 +1,14 @@
 import './styles/ErrorHandler.css';
+import { useEffect } from 'react';
+import { analytics } from './analytics/firebase';
 
 function ErrorHandler({ error }) {
+
+    useEffect(() => {
+        analytics.log('error', {
+            error: error,
+        });
+    });
 
     return (
         <div className="error-handler">
