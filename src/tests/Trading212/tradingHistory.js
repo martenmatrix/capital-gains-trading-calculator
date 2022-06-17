@@ -594,7 +594,7 @@ const tradingHistory = [
       "Stamp duty reserve tax (EUR)": ""
     },
     {
-      "Action": "Market buy",
+      "Action": "Limit buy",
       "Time": "2021-06-08 16:53:48",
       "ISIN": "US95058W1009",
       "Ticker": "WEN",
@@ -612,7 +612,7 @@ const tradingHistory = [
       "Stamp duty reserve tax (EUR)": ""
     },
     {
-      "Action": "Market sell",
+      "Action": "Limit sell",
       "Time": "2021-07-06 13:30:04",
       "ISIN": "US95058W1009",
       "Ticker": "WEN",
