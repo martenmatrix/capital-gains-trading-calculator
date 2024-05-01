@@ -1,5 +1,7 @@
 # Capital Gains Calculator for CSV's
 
+> The numbers may be off by an incredible small amount, as I didn't know about IEEE 754 when I initially created this. :)
+
 This application generates a report of incomes and losses from CSV-Data.
 It currently supports the calculation of profits with the FiFo method for the platforms **Trading212** and **Revolut**. It is also able to calculate the fees paid for currency conversions.
 

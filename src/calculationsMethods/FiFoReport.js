@@ -87,7 +87,7 @@ function Statistics(props) {
                 You paid a total of {`${conversionFees} ${currency}`} for conversion fees.
             </div>
             <div className="table">
-                Below, you will see your profits for the year, broken down by stocks. The numbers may be off by an incredible small amount, as I din't know about IEEE 754 when I initially created this. :)
+                Below, you will see your profits for the year, broken down by stocks.
             </div>
             <StockTable stockArray={props.fifoData.stocks}/>
         </div>
