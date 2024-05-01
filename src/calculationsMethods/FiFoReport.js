@@ -8,6 +8,8 @@ import Table from 'react-bootstrap/Table'
 
 import '../styles/FiFoReport.css';
 
+const round = (number) => Math.round(number * 100) / 100;
+
 function DonationBanner(props) {
     const showAfter = props.showAfter;
     const [isShown, setIsShown] = useState(false);
@@ -53,7 +55,7 @@ function StockTable({ stockArray, currency }) {
               return (
                 <tr>
                     <td>{stock.symbol}</td>
-                    <td>{`${Math.abs(stock.profit)} ${currency}`}</td>
+                    <td>{`${round(stock.profit)} ${currency}`}</td>
                 </tr>
               )
           })}
@@ -65,7 +67,6 @@ function StockTable({ stockArray, currency }) {
 function Statistics(props) {
     const year = props.year;
     const fifoData = props.fifoData;
-    const round = (number) => Math.round(number * 100) / 100;
     const profit = round(fifoData.total);
     const income = round(fifoData.income);
     const loss = round(fifoData.loss);
