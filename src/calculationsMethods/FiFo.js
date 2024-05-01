@@ -91,6 +91,7 @@ const FIFOCalculator = () => {
             const newData = {...currData};
             if (obj.year === year) {
                 const profit = round(obj.totalIncome - obj.totalExpense);
+                newData.stocks = [...currData.stocks, {symbol: obj.symbol, profit }]
                 if (profit < 0) {
                     newData.loss = round(currData.loss + profit);
                 } else {
@@ -105,6 +106,7 @@ const FIFOCalculator = () => {
             total: 0,
             income: 0,
             loss: 0,
+            stocks: []
         });
 
         return totalProfit;

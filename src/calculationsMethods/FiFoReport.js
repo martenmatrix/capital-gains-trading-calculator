@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 import LoadingAnimation from '../LoadingAnimation';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
+import Table from 'react-bootstrap/Table'
 
 import '../styles/FiFoReport.css';
 
@@ -38,6 +39,29 @@ function DonationBanner(props) {
     else return null;
 }
 
+function StockTable({ stockArray }) {
+    return (
+      <Table>
+          <thead>
+          <tr>
+              <th>Stock</th>
+              <th>Profit</th>
+          </tr>
+          </thead>
+          <tbody>
+          {stockArray.map(stock => {
+              return (
+                <tr>
+                    <td>{stock.symbol}</td>
+                    <td>{stock.profit}</td>
+                </tr>
+              )
+          })}
+          </tbody>
+      </Table>
+    )
+}
+
 function Statistics(props) {
     const year = props.year;
     const fifoData = props.fifoData;
@@ -62,6 +86,10 @@ function Statistics(props) {
             <div className="fees">
                 You paid a total of {`${conversionFees} ${currency}`} for conversion fees.
             </div>
+            <div className="table">
+                Below, you will see your profits for the year, broken down by stocks. The numbers may be off by an incredible small amount, as I din't know about IEEE 754 when I initially created this. :)
+            </div>
+            <StockTable stockArray={props.fifoData.stocks}/>
         </div>
     )
 }
