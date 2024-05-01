@@ -39,7 +39,7 @@ function DonationBanner(props) {
     else return null;
 }
 
-function StockTable({ stockArray }) {
+function StockTable({ stockArray, currency }) {
     return (
       <Table>
           <thead>
@@ -53,7 +53,7 @@ function StockTable({ stockArray }) {
               return (
                 <tr>
                     <td>{stock.symbol}</td>
-                    <td>{stock.profit}</td>
+                    <td>{`${Math.abs(stock.profit)} ${currency}`}</td>
                 </tr>
               )
           })}
@@ -89,7 +89,7 @@ function Statistics(props) {
             <div className="table">
                 Below, you will see your profits for the year, broken down by stocks.
             </div>
-            <StockTable stockArray={props.fifoData.stocks}/>
+            <StockTable stockArray={props.fifoData.stocks} currency={currency}/>
         </div>
     )
 }
