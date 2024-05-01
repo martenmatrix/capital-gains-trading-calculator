@@ -26,11 +26,11 @@ function DonationBanner(props) {
         <div className="donation-banner">
             <div className="wrapper">
                 <div className="text">
-                    If this tool saved you some time, consider making a small donation today, because maintaining and hosting this site creates costs. Every penny helps and 100% of your donation immediately goes into this project.
+                   Hosting and maintaining this projects creates costs. Please consider making a small donation, and I'll display your first name on the page. :)
                 </div>
                 <div className="buttons">
-                    <Button size="lg" variant="primary" onClick={() => hide(true)} href="https://www.paypal.com/donate/?hosted_button_id=HSPL5HCL7A6P6" target="_blank" rel="noopener">Donate now!</Button>
-                    <Button size="lg" variant="danger" onClick={() => hide(false)}>No</Button>
+                    <Button size="lg" variant="primary" onClick={() => hide(true)} href="https://www.paypal.com/donate/?hosted_button_id=HSPL5HCL7A6P6" target="_blank" rel="noopener">Support &lt;3</Button>
+                    <Button size="lg" variant="danger" onClick={() => hide(false)}>No :(</Button>
                 </div>
             </div>
         </div>
