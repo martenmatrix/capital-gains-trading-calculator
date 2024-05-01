@@ -86,7 +86,7 @@ function Report(props) {
             await Promise.all(files.map(async (file) => {
                 const text = await getFileAsText(file);
                 const csvArray = csvTextToArray(text);
-                csvs.push(csvArray);
+                csvArray.length > 0 && csvs.push(csvArray);
             }));
     
             const csvArray = mergeCSV(csvs);
